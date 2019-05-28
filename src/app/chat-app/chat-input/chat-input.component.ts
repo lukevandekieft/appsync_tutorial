@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { AppsyncService } from '../appsync.service';
 import { v4 as uuid } from 'uuid';
 import createMessage from '../graphql/mutations/createMessage';
+import deleteMessage from '../graphql/mutations/deleteMessage';
 import getConversationMessages from '../graphql/queries/getConversationMessages';
 import { unshiftMessage, constants } from '../chat-helper';
 import Message from '../types/message';
@@ -65,4 +66,44 @@ export class ChatInputComponent {
     });
     Analytics.record('Chat MSG Sent');
   }
+
+  deleteLastMessage() {
+    const message: Message = {
+      conversationId: this.conversation.id,
+      content: this.message,
+      sender: this.senderId,
+      isSent: false,
+    };
+    console.log(this)
+    console.log('new message', message);
+  //   this.message = '';
+  //   this.appsync.hc().then(client => {
+  //     client.mutate({
+  //       mutation: createMessage,
+  //       variables: message,
+  //
+  //       optimisticResponse: () => ({
+  //         createMessage: {
+  //           ...message,
+  //           __typename: 'Message'
+  //         }
+  //       }),
+  //
+  //       update: (proxy, {data: { createMessage: _message }}) => {
+  //
+  //         const options = {
+  //           query: getConversationMessages,
+  //           variables: { conversationId: this.conversation.id, first: constants.messageFirst }
+  //         };
+  //
+  //         const data = proxy.readQuery(options);
+  //         const _tmp = unshiftMessage(data, _message);
+  //         proxy.writeQuery({...options, data: _tmp});
+  //       }
+  //     }).then(({data}) => {
+  //       console.log('mutation complete', data);
+  //     }).catch(err => console.log('Error creating message', err));
+  //   });
+  //   Analytics.record('Chat MSG Sent');
+  // }
 }
