@@ -1,0 +1,23 @@
+{
+  "default": {
+    "timeout": 120
+  },
+  "account": {
+    "id": "161603482876"
+  },
+  "appsync": {
+    "name": "${self:custom.base}-api"
+  },
+  "db": {
+    "table": {
+      "note": {
+        "name": "${self:custom.base}-notes"
+      }
+    }
+  },
+  "s3": {
+    "bucket": {
+      "name": "${self:service}-${self:provider.stage}-bucket"
+    }
+  }
+}

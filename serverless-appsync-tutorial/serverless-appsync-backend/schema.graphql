@@ -2,21 +2,35 @@ type Schema {
 query: Query
 mutation: Mutation
 }
+
 type Query {
-  allNotes(limit: Int, nextToken: String): PaginatedNotes!
-  getNote(NoteId: ID!): Note
+  batchGetNotes(id: [ID]): [Note]
+  getNote(id: ID!): Note
 }
+
 type Mutation {
-  createNote(NoteId: ID!, title: String!, content: String!): Note
-  deleteNote(NoteId: ID!): Note
+  createNote(input: CreateNoteInput!): Note
+  deleteNote(input: DeleteNoteInput!): Note
+  updateNote(input: UpdateNoteInput!): Note
 }
 type Note {
   id: ID!
   title: String
-  message: String
+  content: String
 }
 
-type PaginatedNotes {
-notes: [Note!]!
-nextToken: String
+input CreateNoteInput {
+	id: ID!
+  title: String
+  content: String
+}
+
+input DeleteNoteInput {
+	id: ID!
+}
+
+input UpdateNoteInput {
+	id: ID!
+  title: String
+  content: String
 }
