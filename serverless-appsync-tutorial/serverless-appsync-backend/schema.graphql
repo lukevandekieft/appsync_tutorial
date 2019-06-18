@@ -1,0 +1,22 @@
+type Schema {
+query: Query
+mutation: Mutation
+}
+type Query {
+  allNotes(limit: Int, nextToken: String): PaginatedNotes!
+  getNote(NoteId: ID!): Note
+}
+type Mutation {
+  createNote(NoteId: ID!, title: String!, content: String!): Note
+  deleteNote(NoteId: ID!): Note
+}
+type Note {
+  id: ID!
+  title: String
+  message: String
+}
+
+type PaginatedNotes {
+notes: [Note!]!
+nextToken: String
+}
