@@ -5,9 +5,6 @@
   "account": {
     "id": "161603482876"
   },
-  "appsync": {
-    "name": "${self:custom.base}-api"
-  },
   "db": {
     "table": {
       "note": {

@@ -1,9 +1,7 @@
 service:
-  name: serverless-appsync-backend-2 # NOTE: update this with your service name
-  publish: false
+  name: serverless-appsync-backend-2
 
 plugins:
-  - serverless-appsync-plugin
   - serverless-plugin-additional-stacks
   - serverless-iam-roles-per-function
   - serverless-plugin-include-dependencies
@@ -15,13 +13,6 @@ provider:
   stage: ${opt:stage, "test"}
   region: us-west-2
   timeout: 120
-  apiname:
-    Type: String
-    Description: "Name of the API, for generate names for resources"
-    MinLength: 3
-    MaxLength: 20
-    AllowedPattern: '^[a-zA-Z][a-zA-Z0-9_]*$'
-
 
 custom:
   account: ${file(./config/config.${self:provider.stage}.json):account}
@@ -38,12 +29,6 @@ custom:
   # IAM
   role:
     arn: arn:aws:iam::${self:custom.account.id}:role  # /<role_name>
-    dynamodb:
-      name: ${self:custom.base}-DynamoDB-AppSyncServiceRole
-      arn: ${self:custom.role.arn}/${self:custom.role.dynamodb.name}
-    lambda:
-      name: ${self:custom.base}-Lambda-AppSyncServiceRole
-      arn: ${self:custom.role.arn}/${self:custom.role.lambda.name}
     cognito:
       auth:
         name: ${self:custom.base}-auth-CognitoRole
@@ -51,13 +36,6 @@ custom:
       unAuth:
         name: ${self:custom.base}-unAuth-CognitoRole
         arn: ${self:custom.role.arn}/${self:custom.role.cognito.unAuth.name}
-
-    logging:
-      name: ${self:custom.base}-Logging-AppSyncServiceRole
-      arn:
-        Fn::GetAtt:
-          - AppSyncLoggingServiceRole
-          - Arn
 
   # Plugin: additionalStacks (nesting CF stacks)
   additionalStacks:
@@ -75,75 +53,3 @@ custom:
       Deploy: Before
       StackName: ${self:custom.dynamoDBStackName}
       Resources: ${file(./resources/dynamodb.yml)}
-
-  appSync:
-    name: ${self:service}-${self:provider.stage}-api
-    authenticationType: AWS_IAM
-    logConfig:
-      loggingRoleArn: ${self:custom.role.logging.arn}
-      level: ALL # Logging Level: NONE | ERROR | ALL
-    mappingTemplates:
-      ## DynamoDB Resolvers
-      - dataSource: Notes
-        type: Mutation
-        field: createNote
-        request: "request/dynamodb/create-item-request-mapping-template.vtl"
-        response: "response/generic-response-mapping-template.vtl"
-      - dataSource: Notes
-        type: Mutation
-        field: deleteNote
-        request: "request/dynamodb/delete-item-request-mapping-template.vtl"
-        response: "response/generic-response-mapping-template.vtl"
-      - dataSource: Notes
-        type: Mutation
-        field: updateNote
-        request: "request/dynamodb/update-item-request-mapping-template.vtl"
-        response: "response/generic-response-mapping-template.vtl"
-      - dataSource: Notes
-        type: Query
-        field: batchGetNotes
-        request: "request/dynamodb/batch-get-notes-request-mapping-template-${self:provider.stage}.vtl"
-        response: "response/batch-get-notes-response-mapping-template-${self:provider.stage}.vtl"
-      - dataSource: Notes
-        type: Query
-        field: getNote
-        request: "request/dynamodb/get-item-request-mapping-template.vtl"
-        response: "response/generic-response-mapping-template.vtl"
-    mappingTemplatesLocation: "mapping-templates"
-    # schema: ./schema-prod.graphql
-    serviceRole: AppSyncServiceRole
-    dataSources:
-      - type: AMAZON_DYNAMODB
-        name: Notes
-        description: 'Notes table'
-        config:
-          tableName: ${self:custom.db.table.note.name}
-          serviceRoleArn: ${self:custom.role.dynamodb.arn}
-
-resources:
-  Resources:
-    # Where AppSyncLoggingServiceRole is a role with CloudWatch Logs write access
-    AppSyncLoggingServiceRole:
-      Type: "AWS::IAM::Role"
-      Properties:
-        RoleName: ${self:custom.role.logging.name}
-        AssumeRolePolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: "Allow"
-              Principal:
-                Service:
-                  - "appsync.amazonaws.com"
-              Action:
-                - "sts:AssumeRole"
-        Policies:
-          - PolicyName: ${self:custom.role.logging.name}-Policy
-            PolicyDocument:
-              Version: "2012-10-17"
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - logs:CreateLogGroup
-                    - logs:CreateLogStream
-                    - logs:PutLogEvents
-                  Resource: "*"
