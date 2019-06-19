@@ -1,5 +1,5 @@
 {
-  "name": "serverless-appsync-backend",
+  "name": "sls-appsync-backend",
   "version": "1.0.0",
   "description": "",
   "main": "handler.js",

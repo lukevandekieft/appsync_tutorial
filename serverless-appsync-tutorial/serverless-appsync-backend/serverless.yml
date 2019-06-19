@@ -10,15 +10,15 @@ provider:
   name: aws
   runtime: nodejs8.10
   profile: default
-  stage: ${opt:stage, "test"}
   region: us-west-2
   timeout: 120
+  stage: ${opt:stage, "test"}
 
 custom:
+  base: ${self:service}-${self:provider.stage}
   account: ${file(./config/config.${self:provider.stage}.json):account}
   db: ${file(./config/config.test.json):db}
   # Base naming convention for all resources
-  base: ${self:service}-${self:provider.stage}
   cognitoStackName: ${self:custom.base}-cognito
   dynamoDBStackName: ${self:custom.base}-dynamodb
 
