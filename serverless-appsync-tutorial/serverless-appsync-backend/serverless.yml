@@ -109,11 +109,6 @@ custom:
         field: getNote
         request: "request/dynamodb/get-item-request-mapping-template.vtl"
         response: "response/generic-response-mapping-template.vtl"
-      - dataSource: Notes
-        type: Query
-        field: listNotes
-        request: "request/dynamodb/list-items-request-mapping-template.vtl"
-        response: "response/generic-response-mapping-template.vtl"
     mappingTemplatesLocation: "mapping-templates"
     # schema: ./schema-prod.graphql
     serviceRole: AppSyncServiceRole

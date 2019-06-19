@@ -30,7 +30,7 @@ UserPoolClient:
 IdentityPool:
   Type: "AWS::Cognito::IdentityPool"
   Properties:
-    IdentityPoolName: ${self:service}-${self:provider.stage}-identity
+    IdentityPoolName: serverlessappsyncbackend2${self:provider.stage}identity
     AllowUnauthenticatedIdentities: true
     CognitoIdentityProviders:
       - ClientId:

@@ -4,8 +4,8 @@ mutation: Mutation
 }
 
 type Query {
-  batchGetNotes(id: [ID]): [Note]
-  getNote(id: ID!): Note
+  batchGetNotes(id: [String]): [Note]
+  getNote(id: String!): Note
 }
 
 type Mutation {
@@ -14,23 +14,23 @@ type Mutation {
   updateNote(input: UpdateNoteInput!): Note
 }
 type Note {
-  id: ID!
+  id: String!
   title: String
   content: String
 }
 
 input CreateNoteInput {
-	id: ID!
+	id: String!
   title: String
   content: String
 }
 
 input DeleteNoteInput {
-	id: ID!
+	id: String!
 }
 
 input UpdateNoteInput {
-	id: ID!
+	id: String!
   title: String
   content: String
 }
