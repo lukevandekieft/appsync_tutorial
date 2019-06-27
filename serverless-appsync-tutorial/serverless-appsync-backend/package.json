@@ -12,6 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "aws-sdk": "^2.392.0",
+    "serverless-appsync-plugin": "^1.1.2",
     "serverless-iam-roles-per-function": "^1.0.1",
     "serverless-plugin-additional-stacks": "^1.1.0",
     "serverless-plugin-include-dependencies": "^3.1.0"
