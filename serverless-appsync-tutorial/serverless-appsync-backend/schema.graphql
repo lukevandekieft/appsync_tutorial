@@ -1,6 +1,6 @@
 type Schema {
-query: Query
-mutation: Mutation
+  query: Query
+  mutation: Mutation
 }
 
 type Query {
@@ -13,6 +13,7 @@ type Mutation {
   deleteNote(input: DeleteNoteInput!): Note
   updateNote(input: UpdateNoteInput!): Note
 }
+
 type Note {
   id: String!
   title: String

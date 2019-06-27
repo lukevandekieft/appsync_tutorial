@@ -13,6 +13,7 @@ NoteTable:
       ReadCapacityUnits: 1
       WriteCapacityUnits: 1
     TableName: ${self:custom.db.table.note.name}
+
 AppSyncDynamoDBServiceRole:
   Type: "AWS::IAM::Role"
   Properties:

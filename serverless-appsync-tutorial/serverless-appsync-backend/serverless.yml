@@ -1,6 +1,5 @@
 service:
-  name: serverless-appsync-backend-2 # NOTE: update this with your service name
-  publish: false
+  name: serverless-appsync-backend
 
 plugins:
   - serverless-appsync-plugin
@@ -12,22 +11,15 @@ provider:
   name: aws
   runtime: nodejs8.10
   profile: default
-  stage: ${opt:stage, "test"}
   region: us-west-2
   timeout: 120
-  apiname:
-    Type: String
-    Description: "Name of the API, for generate names for resources"
-    MinLength: 3
-    MaxLength: 20
-    AllowedPattern: '^[a-zA-Z][a-zA-Z0-9_]*$'
-
+  stage: ${opt:stage, "test"}
 
 custom:
+  base: ${self:service}-${self:provider.stage}
   account: ${file(./config/config.${self:provider.stage}.json):account}
   db: ${file(./config/config.test.json):db}
   # Base naming convention for all resources
-  base: ${self:service}-${self:provider.stage}
   cognitoStackName: ${self:custom.base}-cognito
   dynamoDBStackName: ${self:custom.base}-dynamodb
 
@@ -38,12 +30,6 @@ custom:
   # IAM
   role:
     arn: arn:aws:iam::${self:custom.account.id}:role  # /<role_name>
-    dynamodb:
-      name: ${self:custom.base}-DynamoDB-AppSyncServiceRole
-      arn: ${self:custom.role.arn}/${self:custom.role.dynamodb.name}
-    lambda:
-      name: ${self:custom.base}-Lambda-AppSyncServiceRole
-      arn: ${self:custom.role.arn}/${self:custom.role.lambda.name}
     cognito:
       auth:
         name: ${self:custom.base}-auth-CognitoRole
@@ -51,7 +37,12 @@ custom:
       unAuth:
         name: ${self:custom.base}-unAuth-CognitoRole
         arn: ${self:custom.role.arn}/${self:custom.role.cognito.unAuth.name}
-
+    dynamodb:
+      name: ${self:custom.base}-DynamoDB-AppSyncServiceRole
+      arn: ${self:custom.role.arn}/${self:custom.role.dynamodb.name}
+    lambda:
+      name: ${self:custom.base}-Lambda-AppSyncServiceRole
+      arn: ${self:custom.role.arn}/${self:custom.role.lambda.name}
     logging:
       name: ${self:custom.base}-Logging-AppSyncServiceRole
       arn:
