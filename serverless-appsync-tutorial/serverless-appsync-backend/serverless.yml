@@ -1,5 +1,5 @@
 service:
-  name: serverless-appsync-backend-2
+  name: serverless-appsync-backend
 
 plugins:
   - serverless-plugin-additional-stacks
