@@ -19,7 +19,7 @@ import AddPhoto from "./Components/AddPhoto";
 import awsconfig from './aws-exports';
 
 // Amplify init
-Amplify.configure(awsconfig);
+// Amplify.configure(awsconfig);
 
 const GRAPHQL_API_REGION = awsconfig.aws_appsync_region
 const GRAPHQL_API_ENDPOINT_URL = awsconfig.aws_appsync_graphqlEndpoint
@@ -32,12 +32,14 @@ const client = new AWSAppSyncClient({
   url: GRAPHQL_API_ENDPOINT_URL,
   region: GRAPHQL_API_REGION,
   auth: {
-    type: AUTH_TYPE,
-    // Get the currently logged in users credential.
-    jwtToken: async () => (await Auth.currentSession()).getAccessToken().getJwtToken(),
-  },
-  // Amplify uses Amazon IAM to authorize calls to Amazon S3. This provides the relevant IAM credentials.
-  complexObjectsCredentials: () => Auth.currentCredentials()
+  type: AUTH_TYPE,
+  // IAM Auth
+  credentials: async () => {
+    let credentials = await Auth.currentCredentials();
+    console.log('credentials', credentials);
+    return credentials;
+  } // add back async () => (await Auth.currentCredentials())
+},
 });
 
 class App extends Component {
@@ -58,12 +60,10 @@ class App extends Component {
   }
 }
 
-const AppWithAuth = withAuthenticator(App, true);
-
 export default () => (
   <ApolloProvider client={client}>
     <Rehydrated>
-      <AppWithAuth />
+      <App />
     </Rehydrated>
   </ApolloProvider>
 );

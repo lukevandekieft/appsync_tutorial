@@ -1,2 +1,4 @@
-export { default as QueryListPictures } from "./QueryListPictures";
-export { default as MutationCreatePicture } from "./MutationCreatePicture";
+export { default as GetNote } from "./GetNote";
+export { default as CreateNote } from "./CreateNote";
+export { default as DeleteNote } from "./DeleteNote";
+export { default as BatchGetNotes } from "./BatchGetNotes";

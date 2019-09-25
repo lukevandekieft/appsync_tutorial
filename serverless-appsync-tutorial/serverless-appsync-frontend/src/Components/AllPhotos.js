@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { graphql } from 'react-apollo';
-import { QueryListPictures } from "../GraphQL";
+import { BatchGetNotes } from "../GraphQL";
 
 import { Icon, Table, Button, Loader } from 'semantic-ui-react'
 
@@ -57,7 +57,7 @@ class AllPhotos extends Component {
 }
 
 export default graphql(
-    QueryListPictures,
+    BatchGetNotes,
     {
         options: {
             fetchPolicy: 'cache-and-network',

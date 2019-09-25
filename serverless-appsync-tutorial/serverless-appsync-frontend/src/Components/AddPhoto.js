@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { graphql } from 'react-apollo';
-import { MutationCreatePicture, QueryListPictures } from "../GraphQL";
+import { CreateNote, BatchGetNotes } from "../GraphQL";
 import { v4 as uuid } from 'uuid';
 
 import { Form, Icon } from 'semantic-ui-react'
@@ -83,11 +83,11 @@ class AddPhoto extends Component {
 }
 
 export default graphql(
-    MutationCreatePicture,
+    CreateNote,
     {
         options: {
             update: (proxy, { data: { createPicture } }) => {
-                const query = QueryListPictures;
+                const query = BatchGetNotes;
                 const data = proxy.readQuery({ query });
                 data.listPictures.items = [
                     ...data.listPictures.items.filter((photo) => photo.id !== createPicture.id),
