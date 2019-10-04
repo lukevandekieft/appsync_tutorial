@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { graphql } from 'react-apollo';
-import { BatchGetNotes } from "../GraphQL";
+import { ListNotes } from "../GraphQL";
 
 import { Icon, Table, Button, Loader } from 'semantic-ui-react'
 
 import { Storage } from 'aws-amplify';
 
-class AllPhotos extends Component {
+class AllNotes extends Component {
 
     async handleDownload({ visibility: level, file }) {
         try {
@@ -22,6 +22,7 @@ class AllPhotos extends Component {
     }
 
     render() {
+      console.log(this.props);
         return (
             <React.Fragment>
                 <Table celled={true}>
@@ -57,13 +58,14 @@ class AllPhotos extends Component {
 }
 
 export default graphql(
-    BatchGetNotes,
+    ListNotes,
     {
         options: {
             fetchPolicy: 'cache-and-network',
         },
-        props: ({ data: { listPictures: photos } }) => ({
-            photos,
-        })
-    }
-)(AllPhotos);
+        props: props => ({
+          data: props.data,
+          ListNotes: props.ListNotes
+        }),
+        }
+)(AllNotes);

@@ -1,48 +1,19 @@
 import React, { Component } from 'react';
 import logo from './logo.png';
 import './App.css';
-import 'semantic-ui-css/semantic.min.css'
+import 'semantic-ui-css/semantic.min.css';
 
 //AppSync and Apollo libraries
-import AWSAppSyncClient from "aws-appsync";
-import { Rehydrated } from 'aws-appsync-react';
-import { ApolloProvider } from 'react-apollo';
-
-//Amplify
-import Amplify, { Auth } from 'aws-amplify';
-import { withAuthenticator } from 'aws-amplify-react';
-
-// Components
-import AllPhotos from "./Components/AllPhotos";
-import AddPhoto from "./Components/AddPhoto";
-
+import Amplify from 'aws-amplify';
 import awsconfig from './aws-exports';
 
-// Amplify init
-// Amplify.configure(awsconfig);
+// Components
+import AllNotes from "./Components/AllNotes";
+import AddNote from "./Components/AddNote";
 
-const GRAPHQL_API_REGION = awsconfig.aws_appsync_region
-const GRAPHQL_API_ENDPOINT_URL = awsconfig.aws_appsync_graphqlEndpoint
-const S3_BUCKET_REGION = awsconfig.aws_user_files_s3_bucket_region
-const S3_BUCKET_NAME = awsconfig.aws_user_files_s3_bucket
-const AUTH_TYPE = awsconfig.aws_appsync_authenticationType
+Amplify.configure(awsconfig);
 
-// AppSync client instantiation
-const client = new AWSAppSyncClient({
-  url: GRAPHQL_API_ENDPOINT_URL,
-  region: GRAPHQL_API_REGION,
-  auth: {
-  type: AUTH_TYPE,
-  // IAM Auth
-  credentials: async () => {
-    let credentials = await Auth.currentCredentials();
-    console.log('credentials', credentials);
-    return credentials;
-  } // add back async () => (await Auth.currentCredentials())
-},
-});
-
-class App extends Component {
+export default class App extends Component {
 
   render() {
     return (
@@ -52,18 +23,10 @@ class App extends Component {
           <h1 className="App-title">AWS Amplify with AWS AppSync Sample using Complex Objects </h1>
         </header>
         <div className="App-content">
-          <AddPhoto options={{ bucket: S3_BUCKET_NAME, region: S3_BUCKET_REGION }} />
-          <AllPhotos />
+          <AddNote />
+          <AllNotes />
         </div>
       </div>
     );
   }
 }
-
-export default () => (
-  <ApolloProvider client={client}>
-    <Rehydrated>
-      <App />
-    </Rehydrated>
-  </ApolloProvider>
-);

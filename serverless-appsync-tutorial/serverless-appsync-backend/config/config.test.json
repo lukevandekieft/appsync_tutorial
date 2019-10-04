@@ -11,10 +11,5 @@
         "name": "${self:custom.base}-notes"
       }
     }
-  },
-  "s3": {
-    "bucket": {
-      "name": "${self:service}-${self:provider.stage}-bucket"
-    }
   }
 }

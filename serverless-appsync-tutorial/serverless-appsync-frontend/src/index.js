@@ -1,8 +1,41 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import { BrowserRouter } from 'react-router-dom';
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+import AWSAppSyncClient from "aws-appsync";
+import { Rehydrated } from 'aws-appsync-react';
+import { ApolloProvider } from 'react-apollo';
+
+import Amplify, { Auth } from 'aws-amplify';
+import awsconfig from './aws-exports';
+
+import App from './App';
+
+Amplify.configure(awsconfig);
+
+const client = new AWSAppSyncClient({
+  url: awsconfig.graphqlEndpoint,
+  region: awsconfig.region,
+  auth: {
+    type: awsconfig.authenticationType,
+    credentials: async () => {
+      let credentials = await Auth.currentCredentials();
+      console.log('credentials', credentials);
+      return credentials;
+    }
+  },
+  disableOffline: true
+});
+
+const WithProvider = () => (
+  <ApolloProvider client={client}>
+    <Rehydrated>
+      <BrowserRouter>
+      <App />
+      </BrowserRouter>
+    </Rehydrated>
+  </ApolloProvider>
+);
+
+ReactDOM.render(<WithProvider />, document.getElementById('root'));

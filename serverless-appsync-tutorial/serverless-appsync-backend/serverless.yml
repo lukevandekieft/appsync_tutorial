@@ -92,9 +92,9 @@ custom:
         response: "response/generic-response-mapping-template.vtl"
       - dataSource: Notes
         type: Query
-        field: batchGetNotes
-        request: "request/dynamodb/batch-get-notes-request-mapping-template-${self:provider.stage}.vtl"
-        response: "response/batch-get-notes-response-mapping-template-${self:provider.stage}.vtl"
+        field: ListNotes
+        request: "request/dynamodb/list-items-request-mapping-template.vtl"
+        response: "response/list-items-response-mapping-template.vtl"
       - dataSource: Notes
         type: Query
         field: getNote

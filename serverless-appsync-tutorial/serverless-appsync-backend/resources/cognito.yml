@@ -6,7 +6,7 @@ UserPool:
   Properties:
     UserPoolName: ${self:custom.base}-userpool
     UsernameAttributes:
-      - phone_number
+      - email
     Schema:
       - Name: name
         AttributeDataType: String
@@ -30,7 +30,7 @@ UserPoolClient:
 IdentityPool:
   Type: "AWS::Cognito::IdentityPool"
   Properties:
-    IdentityPoolName: serverlessappsyncbackend2${self:provider.stage}identity
+    IdentityPoolName: serverlessappsyncbackend${self:provider.stage}identity
     AllowUnauthenticatedIdentities: true
     CognitoIdentityProviders:
       - ClientId:
@@ -74,6 +74,9 @@ CognitoUnAuthorizedRole:
                 - appsync:GraphQL
               # TODO: replace apis/*/* with apis/<graphql_id/*
               Resource:
+                - arn:aws:appsync:${self:provider.region}:${self:custom.account.id}:apis/*/types/Query/fields/ListNotes
+                - arn:aws:appsync:${self:provider.region}:${self:custom.account.id}:apis/*/types/Mutation/fields/createNote
+                - arn:aws:appsync:${self:provider.region}:${self:custom.account.id}:apis/*/types/Mutation/fields/deleteNote
                 - arn:aws:appsync:${self:provider.region}:${self:custom.account.id}:apis/*/types/Query/fields/getNote
 
 # Create a role for authorized access to AWS resources. Control what your user can access. This example only allows Lambda invocation
