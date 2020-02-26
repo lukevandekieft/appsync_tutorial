@@ -8,6 +8,7 @@ import { Rehydrated } from 'aws-appsync-react';
 import { ApolloProvider } from 'react-apollo';
 
 import Amplify, { Auth } from 'aws-amplify';
+import { withAuthenticator } from 'aws-amplify-react';
 import awsconfig from './aws-exports';
 
 import App from './App';
@@ -28,11 +29,13 @@ const client = new AWSAppSyncClient({
   disableOffline: true
 });
 
+const AppWithAuth = withAuthenticator(App, true);
+
 const WithProvider = () => (
   <ApolloProvider client={client}>
     <Rehydrated>
       <BrowserRouter>
-      <App />
+      <AppWithAuth />
       </BrowserRouter>
     </Rehydrated>
   </ApolloProvider>

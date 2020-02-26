@@ -18,7 +18,7 @@ class AddNote extends Component {
     }
 
     getInitialState = () => ({
-        id: null,
+        id: 14,
         content: '',
         title: ''
     });
@@ -29,10 +29,12 @@ class AddNote extends Component {
 
     async handleSubmit(e) {
         e.preventDefault();
+        let d = 14;
 
-        const { id, content, title } = this.state;
-
+        const { content, title, id } = this.state;
+        console.log(this.state);
         this.setState(this.getInitialState(), () => {
+
             this.props.createNote({ id, title, content });
         });
     }
@@ -55,38 +57,7 @@ class AddNote extends Component {
 }
 
 export default graphql(
-    // CreateNote,
-    // {
-    //     options: {
-    //         update: (proxy, { data: { createPicture } }) => {
-    //             const query = ListNotes;
-    //             const data = proxy.readQuery({ query });
-    //             data.listPictures.items = [
-    //                 ...data.listPictures.items.filter((photo) => photo.id !== createPicture.id),
-    //                 createPicture
-    //             ];
-    //             proxy.writeQuery({ query, data });
-    //         }
-    //     },
-    //     props: ({ ownProps, mutate }) => ({
-    //         createPicture: photo => mutate({
-    //             variables: { input: photo },
-    //             optimisticResponse: () => ({
-    //                 createPicture: {
-    //                     ...photo,
-    //                     id: uuid(),
-    //                     createdAt: new Date().toISOString(),
-    //                     __typename: 'Picture',
-    //                     file: { ...photo.file, __typename: 'S3Object' }
-    //                 }
-    //             }),
-    //         }),
-    //     }),
-    // }
     CreateNote, {
-      // options: {
-      //   fetchPolicy: 'cache-and-network'
-      // },
       props: props => ({
         createNote: (input) => {
           return new Promise((resolve, reject) => {
@@ -94,16 +65,8 @@ export default graphql(
               variables: {
                 input
               },
-              // optimisticResponse: {
-              //   __typename: 'Mutation',
-              //   createEvent: { ...input, __typename: 'Event' }
-              // },
-              update: (cache, response) => {
-                console.log(response.data.createNote);
-                sessionStorage.setItem('createNote', JSON.stringify(response.data.createNote));
-              }
             }).then((response) => {
-              // console.log(response);
+              console.log(response);
               resolve(response.data.createNote);
             }).catch((err) => console.log(err));
           });

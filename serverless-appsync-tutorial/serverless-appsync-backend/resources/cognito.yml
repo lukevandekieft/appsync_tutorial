@@ -115,7 +115,7 @@ CognitoAuthorizedRole:
                 - appsync:GraphQL
               # TODO: replace apis/*/* with apis/<graphql_id/*
               Resource:
-                - arn:aws:appsync:${self:provider.stage}:${self:custom.account.id}:apis/*/*
+                - arn:aws:appsync:${self:provider.region}:${self:custom.account.id}:apis/*/*
 
 # Assigns the roles to the Identity Pool
 IdentityPoolRoleMapping:

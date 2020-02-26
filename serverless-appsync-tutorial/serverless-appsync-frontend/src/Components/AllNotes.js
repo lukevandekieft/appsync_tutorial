@@ -65,7 +65,7 @@ export default graphql(
         },
         props: props => ({
           data: props.data,
-          ListNotes: props.ListNotes
+          ListNotes: props.data.ListNotes
         }),
         }
 )(AllNotes);
